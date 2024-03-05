@@ -1,15 +1,15 @@
-package com.xose.txn2insight
+package com.maly.txn2insight
 
 import org.apache.spark.sql.{
   SparkSession
 }
 
-object TransactionInsights extends App {
+object Application extends App {
 
   val spark: SparkSession = SparkSession
     .builder()
     .master("local[1]")
-    .appName("TransactionInsights")
+    .appName("Insights")
     .getOrCreate()
 
   println("+++++ Running... +++++")
