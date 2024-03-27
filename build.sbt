@@ -1,4 +1,4 @@
-name := "txn2insight"
+name := "sparkland"
 version := "0.1"
 scalaVersion := "2.12.18"
 fork := true
