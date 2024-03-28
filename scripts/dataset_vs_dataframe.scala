@@ -4,5 +4,9 @@ case class Flight(
   count: BigInt
 )
 
-val df = spark.read.parquet("data/flight-data/parquet/2010-summary.parquet")
+val df = spark.read
+  .option("inferSchema", "true")
+  .option("header", "true")
+  .csv("data/flight-data/csv/2010-summary.csv")
+
 val ds = df.as[Flight]
