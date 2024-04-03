@@ -1,13 +1,13 @@
-data
-target/
-.history
-.cache
-.lib/
-.bsp/
-.vscode
-.metals/
 .bloop/
+.bsp/
+.cache
+.history
+.lib/
+.metals/
+.vscode/
+target/
 
+data
 *.class
 *.log
 *.swp
