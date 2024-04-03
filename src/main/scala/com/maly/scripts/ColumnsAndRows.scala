@@ -9,5 +9,4 @@ object Script {
   }
 
   val df = spark.read.format("json").load("data/flight-data/json/2015-summary.json")
-  df.show(5)
 }
