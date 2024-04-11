@@ -1,6 +1,6 @@
 package com.maly.bitcoin
 
-import org.apache.spark.sql.{SparkSession, Dataset, Row}
+import org.apache.spark.sql.{SparkSession, Dataset, SaveMode}
 import org.apache.spark.sql.functions.{explode, from_json}
 import org.apache.spark.sql.types._
 
@@ -31,4 +31,10 @@ object BatchProducer {
       $"amount".cast(DoubleType)
     ).as[Transaction]
   }
+
+  def unsafeSave(transaction: Dataset[Transaction], path: java.net.URI): Unit = 
+    transaction.write
+      .mode(SaveMode.Overwrite)
+      .partitionBy("date")
+      .parquet(path.toString)
 }

@@ -14,7 +14,6 @@ case class Transaction(
 object Transaction {
   def apply(
       timestamp: Timestamp,
-      date: Date,
       tid: Integer,
       price: Double,
       sell: Boolean,
