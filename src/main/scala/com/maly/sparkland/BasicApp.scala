@@ -2,7 +2,7 @@ package com.maly.sparkland
 
 import org.apache.spark.sql.SparkSession
 
-object BasicApp extends App {
+object BasicApp {
 
   val spark: SparkSession = SparkSession
     .builder()

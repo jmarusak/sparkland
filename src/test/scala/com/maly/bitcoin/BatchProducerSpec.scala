@@ -50,7 +50,7 @@ class BatchProducerSpec
     }
   }
   
-  "BatchProducer.unsafeSave" should {
+  "BatchProducer.save" should {
     "saves a Dataset[Transaction] to parquet file" in {
       implicit val spark: SparkSession = sparkSession
       import spark.implicits._
@@ -58,7 +58,7 @@ class BatchProducerSpec
       val path = new java.net.URI("./data/bitcoin")
       val sourceDS: Dataset[Transaction] = Seq(domainTransaction1, domainTransaction2).toDS()
 
-      BatchProducer.unsafeSave(sourceDS, path)
+      BatchProducer.save(sourceDS, path)
 
       val readDS = spark.read.parquet(path.toString).as[Transaction]
       sourceDS.collect() should contain theSameElementsAs readDS.collect()
