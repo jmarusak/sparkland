@@ -1,3 +1,3 @@
-# Transactions to Insights
+# Bitcoin Transactions Streaming
 
-Scala/Spark/DeltaLake/MLlib/MLflow
+Scala/Kafka/Spark/Parquet/Zeppelin

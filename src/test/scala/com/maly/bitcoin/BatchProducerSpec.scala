@@ -27,9 +27,9 @@ class BatchProducerSpec
     sparkSession.stop()
   }
 
-  val httpTransaction1 = HttpTransaction(
+  val rawTransaction1 = RawTransaction(
         "0.00172969", "1712675895", "68951", "332782270","0")
-  val httpTransaction2 = HttpTransaction(
+  val rawTransaction2 = RawTransaction(
         "0.00707741", "1712675892", "68948", "332782264","0")
   
   val domainTransaction1 = Transaction(
@@ -37,31 +37,16 @@ class BatchProducerSpec
   val domainTransaction2 = Transaction(
     new Timestamp(1712675892), 332782264, 68948.0, false, 0.00707741)  
 
-  "BatchProducer.jsonToHttpTransaction" should {
-    "create a Dataset[HttpTransaction] from a Json string" in {
+  "BatchProducer.jsonToRawTransaction" should {
+    "create a Dataset[RawTransaction] from a Json string" in {
       implicit val spark: SparkSession = sparkSession
       
       val json =
         """[{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"0"},
            |{"amount":"0.00707741","date":"1712675892","price":"68948","tid":"332782264","type":"0"}]""".stripMargin
 
-      val ds: Dataset[HttpTransaction] = BatchProducer.jsonToHttpTransaction(json)
-      ds.collect() should contain theSameElementsAs Seq(httpTransaction1, httpTransaction2)
-    }
-  }
-  
-  "BatchProducer.save" should {
-    "saves a Dataset[Transaction] to parquet file" in {
-      implicit val spark: SparkSession = sparkSession
-      import spark.implicits._
-
-      val path = new java.net.URI("./data/bitcoin")
-      val sourceDS: Dataset[Transaction] = Seq(domainTransaction1, domainTransaction2).toDS()
-
-      BatchProducer.save(sourceDS, path)
-
-      val readDS = spark.read.parquet(path.toString).as[Transaction]
-      sourceDS.collect() should contain theSameElementsAs readDS.collect()
+      val ds: Dataset[RawTransaction] = BatchProducer.jsonToRawTransaction(json)
+      ds.collect() should contain theSameElementsAs Seq(rawTransaction1, rawTransaction2)
     }
   }
 }

@@ -1,6 +1,6 @@
 package com.maly.bitcoin
 
-case class HttpTransaction(
+case class RawTransaction(
     amount: String,
     date: String,
     price: String,

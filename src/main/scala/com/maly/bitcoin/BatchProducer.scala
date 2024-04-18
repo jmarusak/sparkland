@@ -29,12 +29,12 @@ object BatchProducer {
   }
 
   def bitstampUrl(timeParam: String): URL =
-    new URL("https://www.bitstamp.net/api/v2/transactions/btcusd?time=" + timeParam)
+    new URL("raws://www.bitstamp.net/api/v2/transactions/btcusd?time=" + timeParam)
 
   def bitstampTxs(timeParam: String)(spark: SparkSession): Dataset[Transaction] = {
     val url = bitstampUrl(timeParam)
     val json = Source.fromURL(url).mkString
-    httpToDomainTransaction(jsonToHttpTransaction(json)(spark))(spark)
+    rawToDomainTransaction(jsonToRawTransaction(json)(spark))(spark)
   }
 
   def processOneBatch(transactions: Dataset[Transaction], startTime: Instant, endTime: Instant): (Instant, Instant) = {
@@ -57,21 +57,21 @@ object BatchProducer {
       ($"timestamp" < lit(endTime.getEpochSecond).cast(TimestampType)))
   }
       
-  def jsonToHttpTransaction(
+  def jsonToRawTransaction(
       json: String
-  )(implicit spark: SparkSession): Dataset[HttpTransaction] = {
+  )(implicit spark: SparkSession): Dataset[RawTransaction] = {
     import spark.implicits._
     val seq = Seq(json)
     val ds: Dataset[String] = seq.toDS()
-    val txSchema: StructType = Seq.empty[HttpTransaction].toDS().schema
+    val txSchema: StructType = Seq.empty[RawTransaction].toDS().schema
     val schema = ArrayType(txSchema)
     val arrayColumn = from_json($"value", schema)
 
-    ds.select(explode(arrayColumn).alias("v")).select("v.*").as[HttpTransaction]
+    ds.select(explode(arrayColumn).alias("v")).select("v.*").as[RawTransaction]
   }
 
-  def httpToDomainTransaction(
-      ds: Dataset[HttpTransaction]
+  def rawToDomainTransaction(
+      ds: Dataset[RawTransaction]
   )(implicit spark: SparkSession): Dataset[Transaction] = {
     import spark.implicits._
     ds.select(
