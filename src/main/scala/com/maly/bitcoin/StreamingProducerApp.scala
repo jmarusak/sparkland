@@ -2,26 +2,32 @@ package com.maly.bitcoin
 
 import StreamingProducer._
 
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import scala.concurrent.duration._
 import scala.collection.JavaConversions._
 
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+
 object StreamingProducerApp extends App {
+  val DurationPushSleep: FiniteDuration = 10.seconds
+
   val topic = "transactions"
   
-  val properties = Map(
+  val props = Map(
     "bootstrap.servers" -> "localhost:9092",
     "key.serializer" -> "org.apache.kafka.common.serialization.StringSerializer",
     "value.serializer" -> "org.apache.kafka.common.serialization.StringSerializer")
  
-  val kafkaProducer = new KafkaProducer[String, String](properties)
+  val kafkaProducer = new KafkaProducer[String, String](props)
 
-  val jsonRaw =
-    """{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"0"}]"""
-  val txn: Transaction = rawToDomainTransaction(jsonToRawTransaction(jsonRaw))
-  val jsonMessage: String = serializeTransaction(txn)
-
-  println(jsonMessage)
-  kafkaProducer.send(new ProducerRecord(topic, jsonMessage))
+  val jsonRawList: List[String] = bitstampTxs("Minute")
+  for (jsonRaw <- jsonRawList) yield {
+    val txn: Transaction = rawToDomainTransaction(jsonToRawTransaction(jsonRaw))
+    val message: String = serializeTransaction(txn)
+  
+    println(message)
+    kafkaProducer.send(new ProducerRecord(topic, message))
+    Thread.sleep(DurationPushSleep.toMillis)
+  }
   kafkaProducer.close()
 }
 

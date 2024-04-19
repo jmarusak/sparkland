@@ -29,7 +29,7 @@ object BatchProducer {
   }
 
   def bitstampUrl(timeParam: String): URL =
-    new URL("raws://www.bitstamp.net/api/v2/transactions/btcusd?time=" + timeParam)
+    new URL("https://www.bitstamp.net/api/v2/transactions/btcusd?time=" + timeParam)
 
   def bitstampTxs(timeParam: String)(spark: SparkSession): Dataset[Transaction] = {
     val url = bitstampUrl(timeParam)

@@ -10,7 +10,15 @@ class StreamingProducerSpec
     with Matchers {
       
   val jsonRaw =
-    """{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"0"}]"""
+    """{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"0"}"""
+      
+  val jsonRawStringArray =
+    """[{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"0"},
+       |{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"1"}]""".stripMargin
+      
+  val jsonListOfStrings =
+    List("""{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"0"}""",
+       """{"amount":"0.00172969","date":"1712675895","price":"68951","tid":"332782270","type":"1"}""")
 
   val rawTransaction = RawTransaction(
         "0.00172969", "1712675895", "68951", "332782270","0")
@@ -20,6 +28,13 @@ class StreamingProducerSpec
 
   val jsonDomain = 
     """{"timestamp":"2024-04-09 15:18:15","date":"2024-04-09","tid":332782270,"price":68951.0,"sell":false,"amount":0.00172969}"""
+
+  "StreamingProducer.jsonStringArrayToListOfStrings" should {
+    "create a RawTransaction object from a Json string" in {
+      val jsonList: List[String] = StreamingProducer.jsonStringArrayToListOfStrings(jsonRawStringArray)
+      jsonList should equal (jsonListOfStrings)
+    }
+  }
 
   "StreamingProducer.jsonToRawTransaction" should {
     "create a RawTransaction object from a Json string" in {
