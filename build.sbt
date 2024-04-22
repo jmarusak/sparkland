@@ -11,4 +11,4 @@ libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.7.0"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.18" % Test
 
-Compile / mainClass := Some("com.maly.bitcoin.StreamingProducerApp")
+//Compile / mainClass := Some("com.maly.bitcoin.StreamingProducerApp")
