@@ -1,4 +1,4 @@
-package com.maly.bitcoin
+package bitcoin
 
 import java.sql.{Date, Timestamp}
 

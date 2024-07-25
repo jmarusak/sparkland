@@ -1,3 +1,7 @@
+*.class
+*.log
+*.swp
+
 .bloop/
 .bsp/
 .cache
@@ -5,9 +9,5 @@
 .lib/
 .metals/
 .vscode/
+data/
 target/
-
-data
-*.class
-*.log
-*.swp

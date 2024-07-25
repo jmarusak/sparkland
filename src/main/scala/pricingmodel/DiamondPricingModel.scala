@@ -1,4 +1,4 @@
-package com.maly.diamonds
+package pricingmodel 
 
 import org.apache.spark.sql.SparkSession
 

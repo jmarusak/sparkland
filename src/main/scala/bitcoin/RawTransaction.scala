@@ -1,4 +1,4 @@
-package com.maly.bitcoin
+package bitcoin
 
 case class RawTransaction(
     amount: String,

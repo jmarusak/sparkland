@@ -1,4 +1,4 @@
-package com.maly.bitcoin
+package bitcoin
 
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
